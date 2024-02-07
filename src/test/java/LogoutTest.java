@@ -1,20 +1,17 @@
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
 
-public class LoginTest {
+public class LogoutTest{
 
     WebDriver driver;
     String url="https://www.myprotein.ro/";
@@ -28,7 +25,23 @@ public class LoginTest {
     }
 
     @Test
-    public void login(){
+    public void logout(){
+        Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        login();
+        WebElement logoutBtn = driver.findElement(By.xpath("//button[@aria-label='Deconectare']"));
+        logoutBtn.click();
+
+    //click pe butonul de cont
+        WebElement contButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[.='Cont']")));
+        contButton.click();
+
+        WebElement successLogout = driver.findElement(By.xpath("//h1[.='Autentificare client']"));
+        Assert.assertTrue(successLogout.getText().contains("Autentificare client"));
+        driver.quit();
+
+    }
+
+    public void login() {
         //accept cookies
         Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         WebElement cookie = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@id='onetrust-accept-btn-handler']")));
@@ -58,11 +71,6 @@ public class LoginTest {
         WebElement success = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[.='Pagină principală cont']")));
         Assert.assertTrue(success.getText().contains("Pagină principală cont"),"My account page not displayed");
 
-
-    }
-    @AfterTest
-    public void after(){
-        driver.quit();
     }
 
 }
