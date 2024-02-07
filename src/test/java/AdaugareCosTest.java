@@ -50,6 +50,7 @@ public class AdaugareCosTest {
         WebElement check = driver.findElement(By.xpath("//div[@class='athenaBasket_totalLabel']"));
         js.executeScript("arguments[0].scrollIntoView(true);", check);
         Assert.assertTrue(check.isDisplayed());
+        driver.quit();
 
     }
 
